@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"compress/gzip"
+	"crypto/md5"
+	"encoding/base64"
 	"fmt"
 	"io"
 	"net/http"
@@ -14,7 +16,9 @@ import (
 var baseURL = "http://music.163.com"
 
 func main() {
-	getSongList("/discover/toplist?id=3779629")
+
+	// fmt.Println(encryptSong("491228747"))
+	// getSongList("/discover/toplist?id=3779629")
 	//getTopList()
 	//resp, _ := doAction("GET", "http://music.163.com/discover/toplist?id=3779629", nil)
 	//echoResp(resp)
@@ -99,4 +103,14 @@ func echoResp(resp *http.Response) {
 
 	io.Copy(os.Stdout, data)
 
+}
+
+func encryptSong(id string) string {
+	m := []byte("3go8&$8*3")
+	song := []byte(id)
+	for k, v := range song {
+		song[k] = v ^ m[k]
+	}
+	hash := md5.Sum(song)
+	return base64.URLEncoding.EncodeToString(hash[:])
 }
