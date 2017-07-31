@@ -1,0 +1,49 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "iTyK6+LglXn9zjYGbjMTLxtLXio=",
+			"path": "github.com/PuerkitoBio/goquery",
+			"revision": "8806ada2a4ab225c06e9106f9631be80932db7ce",
+			"revisionTime": "2017-06-23T16:21:02Z"
+		},
+		{
+			"checksumSHA1": "2rWSos1D+xqNSGkvEMOG3pntod8=",
+			"path": "github.com/andybalholm/cascadia",
+			"revision": "349dd0209470eabd9514242c688c403c0926d266",
+			"revisionTime": "2016-12-24T14:14:13Z"
+		},
+		{
+			"checksumSHA1": "fYQphz7oYzms7NDedenUclqZvzI=",
+			"path": "github.com/hajimehoshi/go-mp3",
+			"revision": "38fd3fbee64d4cf50b38449550183de5bd3c1bb2",
+			"revisionTime": "2017-07-04T14:12:29Z"
+		},
+		{
+			"checksumSHA1": "GvLjlJarVnav3bBYcgdpiNACiBc=",
+			"path": "github.com/hajimehoshi/go-mp3/internal/bits",
+			"revision": "38fd3fbee64d4cf50b38449550183de5bd3c1bb2",
+			"revisionTime": "2017-07-04T14:12:29Z"
+		},
+		{
+			"checksumSHA1": "pY2/aJdzLpBaRIIvjfE+LjQSCXA=",
+			"path": "github.com/hajimehoshi/go-mp3/internal/imdct",
+			"revision": "38fd3fbee64d4cf50b38449550183de5bd3c1bb2",
+			"revisionTime": "2017-07-04T14:12:29Z"
+		},
+		{
+			"checksumSHA1": "vqc3a+oTUGX8PmD0TS+qQ7gmN8I=",
+			"path": "golang.org/x/net/html",
+			"revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
+			"revisionTime": "2017-07-19T21:11:51Z"
+		},
+		{
+			"checksumSHA1": "z79z5msRzgU48FCZxSuxfU8b4rs=",
+			"path": "golang.org/x/net/html/atom",
+			"revision": "f5079bd7f6f74e23c4d65efa0f4ce14cbd6a3c0f",
+			"revisionTime": "2017-07-19T21:11:51Z"
+		}
+	],
+	"rootPath": "github.com/vskity/music"
+}
