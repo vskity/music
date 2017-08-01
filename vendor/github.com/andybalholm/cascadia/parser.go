@@ -808,8 +808,6 @@ func (p *parser) parseSelector() (result Selector, err error) {
 			result = siblingSelector(result, c, false)
 		}
 	}
-
-	panic("unreachable")
 }
 
 // parseSelectorGroup parses a group of selectors, separated by commas.

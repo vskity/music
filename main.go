@@ -3,7 +3,10 @@ package main
 import (
 	"bytes"
 	"compress/gzip"
+	"crypto/aes"
+	"crypto/cipher"
 	"crypto/md5"
+	"crypto/rand"
 	"encoding/base64"
 	"fmt"
 	"io"
@@ -13,9 +16,24 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var baseURL = "http://music.163.com"
+var (
+	baseURL = "http://music.163.com"
+	jar     http.CookieJar
+	nonce   = "0CoJUm6Qyw8W8jud"
+)
+
+type song struct {
+	id     string
+	name   string
+	time   string
+	artist string
+}
 
 func main() {
+
+	//fmt.Println(aesEnv("exampleplaintext")) //e1cdb90013f76bdf10c3d76b40e5e1643acf2e1c6787459fad7311815e9f0af8
+	a := []byte("exampleplaintext") //d20e0180d158f93a4d748e7e8455789f4cd913385d96c032fdcb4fad5b3c5d4c
+	fmt.Println(encodeData(a))      //ec85f86eebc62c4d63341ba2f1bb380b4cd913385d96c032fdcb4fad5b3c5d4c
 
 	// fmt.Println(encryptSong("491228747"))
 	// getSongList("/discover/toplist?id=3779629")
@@ -62,9 +80,9 @@ func getSongList(id string) []*song {
 
 func doAction(method, url string, data map[string]interface{}) (*http.Response, error) {
 
-	body := encodeData(data)
+	body := encodeData([]byte(""))
 
-	req, nrErr := http.NewRequest(method, url, body)
+	req, nrErr := http.NewRequest(method, url, bytes.NewBufferString(body))
 	if nrErr != nil {
 		return nil, nrErr
 	}
@@ -79,15 +97,35 @@ func doAction(method, url string, data map[string]interface{}) (*http.Response, 
 	req.Header.Set("Referer", "http://music.163.com/")
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
 
-	cli := http.Client{}
-
+	cli := http.Client{
+		Jar: jar,
+	}
 	return cli.Do(req)
-
 }
 
-func encodeData(data map[string]interface{}) io.Reader {
+func encodeData(text, key []byte) string {
 
-	return bytes.NewBufferString("")
+	// PKCS5Padding
+	padding := 16 - len(text)%16
+	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
+	text = append(text, padtext...)
+
+	block, err := aes.NewCipher([]byte(""))
+	if err != nil {
+		panic(err)
+	}
+
+	iv := make([]byte, aes.BlockSize)
+	if _, err = io.ReadFull(rand.Reader, iv); err != nil {
+		fmt.Println("read full error ", err)
+		return ""
+	}
+
+	dst := make([]byte, len(text))
+
+	cipher.NewCBCDecrypter(block, iv).CryptBlocks(dst, text)
+
+	return fmt.Sprintf("%x", dst)
 }
 
 func echoResp(resp *http.Response) {
@@ -102,7 +140,6 @@ func echoResp(resp *http.Response) {
 	}
 
 	io.Copy(os.Stdout, data)
-
 }
 
 func encryptSong(id string) string {
@@ -113,4 +150,11 @@ func encryptSong(id string) string {
 	}
 	hash := md5.Sum(song)
 	return base64.URLEncoding.EncodeToString(hash[:])
+}
+
+func reverse(r []byte) []byte {
+	for i, j := 0, len(r)-1; i < j; i, j = i+1, j-1 {
+		r[i], r[j] = r[j], r[i]
+	}
+	return r
 }
